@@ -1,0 +1,36 @@
+﻿<Window x:Class="RedmineExpansion.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RedmineExpansion"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Task">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Ticket Number:"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="TicketNumberTextBox" Width="120" Margin="0,0,10,0"/>
+                        <Button Content="Show" Width="60" Click="ShowTaskButton_Click"/>
+                    </StackPanel>
+                    <TextBlock Text="Task Parameters (ini format):" Margin="0,10,0,0"/>
+                    <TextBox x:Name="TaskParamsTextBox" Height="200" Margin="0,5,0,0" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Task List">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Select fields to display:"/>
+                    <ListBox x:Name="TaskFieldListBox" SelectionMode="Multiple" Height="200"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="User">
+                <!-- ユーザ用のUI要素をここに追加 -->
+            </TabItem>
+            <TabItem Header="Project">
+                <!-- プロジェクト用のUI要素をここに追加 -->
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
