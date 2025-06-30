@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:RedmineExpansion"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
     <Grid>
         <TabControl>
             <TabItem Header="Task">
@@ -32,5 +35,8 @@
                 <!-- プロジェクト用のUI要素をここに追加 -->
             </TabItem>
         </TabControl>
+        <StatusBar Height="30">
+            <TextBlock Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}" Foreground="Red" VerticalAlignment="Center"/>
+        </StatusBar>
     </Grid>
 </Window>

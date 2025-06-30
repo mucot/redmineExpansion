@@ -21,8 +21,7 @@ namespace RedmineExpansion;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private string redmineUrl;
-    private string apiKey;
+    private MainWindowViewModel _viewModel;
     private readonly List<string> defaultTaskFields = new List<string> { "id", "subject", "status", "priority", "assigned_to", "author", "start_date", "due_date", "done_ratio", "description" };
 
     public MainWindow()
@@ -34,38 +33,21 @@ public partial class MainWindow : Window
             foreach (var item in TaskFieldListBox.Items)
                 TaskFieldListBox.SelectedItems.Add(item);
         }
-        LoadSettings();
         Loaded += MainWindow_Loaded;
-    }
-
-    private void LoadSettings()
-    {
-        string iniPath = "..\\..\\..\\settings.ini";
-        if (!File.Exists(iniPath))
-        {
-            MessageBox.Show($"Settings file not found: {iniPath}");
-            return;
-        }
-        foreach (var line in File.ReadAllLines(iniPath, Encoding.UTF8))
-        {
-            if (line.StartsWith("RedmineUrl="))
-                redmineUrl = line.Substring("RedmineUrl=".Length).Trim();
-            else if (line.StartsWith("ApiKey="))
-                apiKey = line.Substring("ApiKey=".Length).Trim();
-        }
     }
 
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(redmineUrl) || string.IsNullOrEmpty(apiKey))
+        _viewModel = DataContext as MainWindowViewModel;
+        if (string.IsNullOrEmpty(_viewModel.RedmineUrl) || string.IsNullOrEmpty(_viewModel.ApiKey))
         {
             MessageBox.Show("Redmine URL or API key is not set.");
             return;
         }
         using (var client = new HttpClient())
         {
-            client.BaseAddress = new Uri(redmineUrl);
-            client.DefaultRequestHeaders.Add("X-Redmine-API-Key", apiKey);
+            client.BaseAddress = new Uri(_viewModel.RedmineUrl);
+            client.DefaultRequestHeaders.Add("X-Redmine-API-Key", _viewModel.ApiKey);
             try
             {
                 // 例: プロジェクト一覧を取得
@@ -95,7 +77,7 @@ public partial class MainWindow : Window
             MessageBox.Show("Please enter a ticket number.");
             return;
         }
-        if (string.IsNullOrEmpty(redmineUrl) || string.IsNullOrEmpty(apiKey))
+        if (string.IsNullOrEmpty(_viewModel.RedmineUrl) || string.IsNullOrEmpty(_viewModel.ApiKey))
         {
             MessageBox.Show("Redmine URL or API key is not set.");
             return;
@@ -105,8 +87,8 @@ public partial class MainWindow : Window
             selectedFields.Add(item.ToString());
         using (var client = new HttpClient())
         {
-            client.BaseAddress = new Uri(redmineUrl);
-            client.DefaultRequestHeaders.Add("X-Redmine-API-Key", apiKey);
+            client.BaseAddress = new Uri(_viewModel.RedmineUrl);
+            client.DefaultRequestHeaders.Add("X-Redmine-API-Key", _viewModel.ApiKey);
             try
             {
                 var response = await client.GetAsync($"/issues/{ticketNo}.json?include=children,journals,watchers");
