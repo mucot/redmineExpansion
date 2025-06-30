@@ -40,7 +40,7 @@ public partial class MainWindow : Window
 
     private void LoadSettings()
     {
-        string iniPath = "settings.ini";
+        string iniPath = "..\\..\\..\\settings.ini";
         if (!File.Exists(iniPath))
         {
             MessageBox.Show($"Settings file not found: {iniPath}");
